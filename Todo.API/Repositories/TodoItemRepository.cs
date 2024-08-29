@@ -14,9 +14,11 @@ public class TodoItemRepository : ITodoItemRepository
         this.applicationDbContext = applicationDbContext;
     }
 
-    public Task AddAsync(TodoItem entity)
+    public async Task AddAsync(TodoItem todoItem)
     {
-        throw new NotImplementedException();
+        applicationDbContext.TodoItems.Add(todoItem);
+
+        await applicationDbContext.SaveChangesAsync();
     }
 
     public Task DeleteAsync(int id)
