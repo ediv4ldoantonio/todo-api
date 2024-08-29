@@ -3,7 +3,7 @@ using Todo.API.Enums;
 
 namespace Todo.API.Models;
 
-public class Task
+public class TodoItem
 {
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
