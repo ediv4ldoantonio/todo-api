@@ -6,7 +6,7 @@ public interface IRepository<T> where T : class
     Task<IEnumerable<T>> GetAllAsync();
 
     // Get a single item by ID
-    Task<T> GetByIdAsync(int id);
+    Task<T?> GetByIdAsync(string id);
 
     // Add a new item
     Task AddAsync(T entity);
@@ -15,5 +15,5 @@ public interface IRepository<T> where T : class
     Task UpdateAsync(T entity);
 
     // Delete an item by ID
-    Task DeleteAsync(int id);
+    Task DeleteAsync(string id);
 }

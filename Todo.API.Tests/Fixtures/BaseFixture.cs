@@ -32,7 +32,14 @@ public class BaseFixture : IDisposable
 
     public void Dispose()
     {
-        var applicationDbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
-        applicationDbContext.Dispose();
+        var appDbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
+        appDbContext.Dispose();
+    }
+
+    public async Task CleanDatabase()
+    {
+        var appDbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+        await appDbContext.Database.EnsureDeletedAsync();
     }
 }

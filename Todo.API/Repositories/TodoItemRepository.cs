@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Todo.API.DataContext;
 using Todo.API.Models;
 using Todo.API.Repositories.Contracts;
@@ -6,24 +7,29 @@ namespace Todo.API.Repositories;
 
 public class TodoItemRepository : ITodoItemRepository
 {
-    private readonly ApplicationDbContext applicationDbContext;
+    private readonly ApplicationDbContext appDbContext;
 
 
-    public TodoItemRepository(ApplicationDbContext applicationDbContext)
+    public TodoItemRepository(ApplicationDbContext appDbContext)
     {
-        this.applicationDbContext = applicationDbContext;
+        this.appDbContext = appDbContext;
     }
 
     public async Task AddAsync(TodoItem todoItem)
     {
-        applicationDbContext.TodoItems.Add(todoItem);
+        appDbContext.TodoItems.Add(todoItem);
 
-        await applicationDbContext.SaveChangesAsync();
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task DeleteAsync(int id)
+    public async Task DeleteAsync(string id)
     {
-        throw new NotImplementedException();
+        TodoItem? todoItem = await GetByIdAsync(id)
+                ?? throw new Exception("TodoItem not found");
+
+        appDbContext.TodoItems.Remove(todoItem);
+
+        await appDbContext.SaveChangesAsync();
     }
 
     public Task<IEnumerable<TodoItem>> GetAllAsync()
@@ -31,9 +37,11 @@ public class TodoItemRepository : ITodoItemRepository
         throw new NotImplementedException();
     }
 
-    public Task<TodoItem> GetByIdAsync(int id)
+    public async Task<TodoItem?> GetByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        return await appDbContext.TodoItems
+            .Where(todoItem => todoItem.Id == id)
+            .FirstOrDefaultAsync();
     }
 
     public Task UpdateAsync(TodoItem entity)
