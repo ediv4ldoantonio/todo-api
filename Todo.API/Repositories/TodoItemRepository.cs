@@ -9,7 +9,6 @@ public class TodoItemRepository : ITodoItemRepository
 {
     private readonly ApplicationDbContext appDbContext;
 
-
     public TodoItemRepository(ApplicationDbContext appDbContext)
     {
         this.appDbContext = appDbContext;
@@ -32,9 +31,10 @@ public class TodoItemRepository : ITodoItemRepository
         await appDbContext.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<TodoItem>> GetAllAsync()
+    public async Task<IEnumerable<TodoItem>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await appDbContext.TodoItems
+            .ToListAsync();
     }
 
     public async Task<TodoItem?> GetByIdAsync(string id)

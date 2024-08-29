@@ -41,7 +41,6 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
         await todoItemRepository.AddAsync(todoItem);
 
         List<TodoItem> todoItems = appDbContext.TodoItems.ToList();
-        Console.WriteLine(todoItems);
         Assert.Single(todoItems);
         Assert.Equal(todoItem.Description, todoItems[0].Description);
         Assert.Equal(todoItem.Id, todoItems[0].Id);
@@ -70,5 +69,20 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
         todoItems = appDbContext.TodoItems.ToList();
 
         Assert.Empty(todoItems);
+    }
+
+    [Fact]
+    public async Task Test_Should_Get_All_TodoItems()
+    {
+        await baseFixture.CleanDatabase();
+
+        for (int i = 0; i < 3; i++)
+            appDbContext.TodoItems.Add(GetTodoItem());
+
+        await appDbContext.SaveChangesAsync();
+
+        IEnumerable<TodoItem> todoItems = await todoItemRepository.GetAllAsync();
+        Assert.NotEmpty(todoItems);
+        Assert.Equal(3, todoItems.Count());
     }
 }
