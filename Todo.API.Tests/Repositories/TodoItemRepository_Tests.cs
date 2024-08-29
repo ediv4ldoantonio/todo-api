@@ -85,4 +85,21 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
         Assert.NotEmpty(todoItems);
         Assert.Equal(3, todoItems.Count());
     }
+
+    [Fact]
+    public async Task Test_Should_Get_TodoItem_By_Id()
+    {
+        await baseFixture.CleanDatabase();
+
+        TodoItem todoItem = GetTodoItem();
+
+        appDbContext.TodoItems.Add(todoItem);
+
+        await appDbContext.SaveChangesAsync();
+
+        TodoItem? retrievedTodoItem = await todoItemRepository.GetByIdAsync(todoItem.Id);
+
+        Assert.NotNull(retrievedTodoItem);
+        Assert.Equal(todoItem.Id, retrievedTodoItem.Id);
+    }
 }
