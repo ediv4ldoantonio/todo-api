@@ -3,11 +3,11 @@ using Todo.API.Models;
 
 namespace Todo.API.DataContext;
 
-public class AppDataContext : DbContext
+public class ApplicationDbContext : DbContext
 {
     public DbSet<TodoItem> TodoItems { get; set; }
 
-    public AppDataContext(DbContextOptions<AppDataContext> options) : base(options)
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
 
     }
