@@ -44,8 +44,10 @@ public class TodoItemRepository : ITodoItemRepository
             .FirstOrDefaultAsync();
     }
 
-    public Task UpdateAsync(TodoItem entity)
+    public async Task UpdateAsync(TodoItem todoItem)
     {
-        throw new NotImplementedException();
+        appDbContext.TodoItems.Update(todoItem);
+
+        await appDbContext.SaveChangesAsync();
     }
 }

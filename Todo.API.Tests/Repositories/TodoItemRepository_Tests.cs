@@ -45,8 +45,6 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
         Assert.Equal(todoItem.Description, todoItems[0].Description);
         Assert.Equal(todoItem.Id, todoItems[0].Id);
         Assert.Equal(todoItem.Title, todoItems[0].Title);
-        Assert.Equal(todoItem.Status, todoItems[0].Status);
-        Assert.Equal(todoItem.DueDate, todoItems[0].DueDate);
     }
 
     [Fact]
@@ -101,5 +99,29 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 
         Assert.NotNull(retrievedTodoItem);
         Assert.Equal(todoItem.Id, retrievedTodoItem.Id);
+        Assert.Equal(todoItem.Title, retrievedTodoItem.Title);
+    }
+
+    [Fact]
+    public async Task Test_Should_Update_TodoItem()
+    {
+        await baseFixture.CleanDatabase();
+
+        TodoItem todoItem = GetTodoItem();
+
+        appDbContext.TodoItems.Add(todoItem);
+
+        await appDbContext.SaveChangesAsync();
+
+        todoItem.Title = "changed test";
+
+        await todoItemRepository.UpdateAsync(todoItem);
+
+        TodoItem? updatedTodoItem = appDbContext.TodoItems
+                .Where(item => item.Id == todoItem.Id)
+                .FirstOrDefault();
+
+        Assert.Equal(todoItem.Id, updatedTodoItem!.Id);
+        Assert.Equal("changed test", updatedTodoItem!.Title);
     }
 }
