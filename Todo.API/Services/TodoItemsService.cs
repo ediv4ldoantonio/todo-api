@@ -25,6 +25,33 @@ public class TodoItemsService : ITodoItemsService
 
         await todoItemsRepository.AddAsync(todoItem);
 
+        return MapTodoItemToDto(todoItem);
+    }
+
+    public async Task DeleteAsync(string id)
+    {
+        await todoItemsRepository.DeleteAsync(id);
+    }
+
+    public async Task<IEnumerable<TodoItemDto>> GetAllAsync()
+    {
+        IEnumerable<TodoItem> todoItems = await todoItemsRepository.GetAllAsync();
+
+        return todoItems.Select(todoItem => MapTodoItemToDto(todoItem));
+    }
+
+    public Task<TodoItemDto?> GetByIdAsync(string id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task UpdateAsync(TodoItemDto todoItemDto)
+    {
+        throw new NotImplementedException();
+    }
+
+    private TodoItemDto MapTodoItemToDto(TodoItem todoItem)
+    {
         return new TodoItemDto()
         {
             Id = todoItem.Id,
@@ -36,25 +63,5 @@ public class TodoItemsService : ITodoItemsService
             Status = todoItem.Status,
             UpdatedAt = todoItem.UpdatedAt
         };
-    }
-
-    public async Task DeleteAsync(string id)
-    {
-        await todoItemsRepository.DeleteAsync(id);
-    }
-
-    public Task<IEnumerable<TodoItemDto>> GetAllAsync()
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<TodoItemDto?> GetByIdAsync(string id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task UpdateAsync(TodoItemDto todoItemDto)
-    {
-        throw new NotImplementedException();
     }
 }
