@@ -3,6 +3,8 @@ using Microsoft.OpenApi.Models;
 using Todo.API.Data;
 using Todo.API.Repositories;
 using Todo.API.Repositories.Contracts;
+using Todo.API.Services;
+using Todo.API.Services.Contracts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +15,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySQL(connectionString!);
 });
 
+builder.Services.AddControllers();
+
 #region Repositories
 builder.Services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
 #endregion
 
+#region Services
+builder.Services.AddScoped<ITodoItemsService, TodoItemsService>();
+#endregion
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
@@ -30,6 +37,8 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
+app.MapControllers();
 
 if (app.Environment.IsDevelopment())
 {
@@ -47,7 +56,5 @@ var context = app.Services.CreateScope().ServiceProvider
         .GetRequiredService<ApplicationDbContext>();
 
 await DataSeeder.Seed(context);
-
-app.MapGet("/", () => "Todo API");
 
 app.Run();

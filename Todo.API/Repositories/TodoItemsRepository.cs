@@ -50,6 +50,7 @@ public class TodoItemsRepository : ITodoItemsRepository
     public async Task<IEnumerable<TodoItem>> GetAllAsync()
     {
         return await appDbContext.TodoItems
+            .OrderByDescending(t => t.CreatedAt)
             .ToListAsync();
     }
 

@@ -61,6 +61,8 @@ public class TodoItemsService : ITodoItemsService
         todoItem.Status = updateTodoItemDto.Status;
         todoItem.Priority = updateTodoItemDto.Priority;
 
+        todoItem.UpdatedAt = DateTime.Now;
+
         await todoItemsRepository.UpdateAsync(todoItem);
 
         return MapTodoItemToDto(todoItem);
