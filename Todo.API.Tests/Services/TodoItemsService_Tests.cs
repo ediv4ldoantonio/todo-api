@@ -5,6 +5,7 @@ using Todo.API.DTOs;
 using Todo.API.Enums;
 using Todo.API.Models;
 using Todo.API.Services;
+using Todo.API.Tests.Factories;
 using Todo.API.Tests.Fixtures;
 
 namespace Todo.API.Tests.Services;
@@ -12,6 +13,7 @@ namespace Todo.API.Tests.Services;
 public class TodoItemsService_Tests : IClassFixture<BaseFixture>
 {
     private readonly TodoItemsService todoItemsService;
+    private readonly TodoItemsFactory todoItemsFactory;
     private readonly ApplicationDbContext appDbContext;
     private readonly BaseFixture baseFixture;
 
@@ -19,6 +21,7 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
     {
         this.baseFixture = baseFixture;
         todoItemsService = baseFixture.ServiceProvider.GetRequiredService<TodoItemsService>();
+        todoItemsFactory = baseFixture.ServiceProvider.GetRequiredService<TodoItemsFactory>();
         appDbContext = baseFixture.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     }
 
@@ -45,5 +48,27 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
         Assert.Equal(todoItemDto.DueDate, todoItems[0].DueDate);
         Assert.Equal(todoItemDto.Priority, todoItems[0].Priority);
         Assert.Equal(todoItemDto.Status, todoItems[0].Status);
+    }
+
+    [Fact]
+    public async Task Test_Should_Delete_TodoItem()
+    {
+        await baseFixture.CleanDatabase();
+
+        TodoItem todoItem = todoItemsFactory.GetTodoItem();
+
+        appDbContext.TodoItems.Add(todoItem);
+
+        await appDbContext.SaveChangesAsync();
+
+        List<TodoItem> todoItems = await appDbContext.TodoItems.ToListAsync();
+
+        Assert.NotEmpty(todoItems);
+
+        await todoItemsService.DeleteAsync(todoItem.Id);
+
+        todoItems = await appDbContext.TodoItems.ToListAsync();
+
+        Assert.Empty(todoItems);
     }
 }

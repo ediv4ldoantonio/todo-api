@@ -1,34 +1,24 @@
 using Microsoft.Extensions.DependencyInjection;
 using Todo.API.Data;
-using Todo.API.Enums;
 using Todo.API.Models;
 using Todo.API.Repositories;
+using Todo.API.Tests.Factories;
 
 namespace Todo.API.Tests.Fixtures;
 
 public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
 {
     private readonly TodoItemsRepository todoItemsRepository;
+    private readonly TodoItemsFactory todoItemsFactory;
     private readonly ApplicationDbContext appDbContext;
     private readonly BaseFixture baseFixture;
 
     public TodoItemsRepository_Tests(BaseFixture baseFixture)
     {
         this.baseFixture = baseFixture;
+        todoItemsFactory = baseFixture.ServiceProvider.GetRequiredService<TodoItemsFactory>();
         todoItemsRepository = baseFixture.ServiceProvider.GetRequiredService<TodoItemsRepository>();
         appDbContext = baseFixture.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    }
-
-    private TodoItem GetTodoItem()
-    {
-        return new()
-        {
-            Title = "Test",
-            Description = "desc",
-            DueDate = DateTime.Now.AddDays(5),
-            Priority = Priority.High,
-            Status = Status.Pending
-        };
     }
 
     [Fact]
@@ -36,7 +26,7 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
     {
         await baseFixture.CleanDatabase();
 
-        TodoItem todoItem = GetTodoItem();
+        TodoItem todoItem = todoItemsFactory.GetTodoItem();
 
         await todoItemsRepository.AddAsync(todoItem);
 
@@ -52,7 +42,7 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
     {
         await baseFixture.CleanDatabase();
 
-        TodoItem todoItem = GetTodoItem();
+        TodoItem todoItem = todoItemsFactory.GetTodoItem();
 
         appDbContext.TodoItems.Add(todoItem);
 
@@ -75,7 +65,7 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
         await baseFixture.CleanDatabase();
 
         for (int i = 0; i < 3; i++)
-            appDbContext.TodoItems.Add(GetTodoItem());
+            appDbContext.TodoItems.Add(todoItemsFactory.GetTodoItem());
 
         await appDbContext.SaveChangesAsync();
 
@@ -89,7 +79,7 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
     {
         await baseFixture.CleanDatabase();
 
-        TodoItem todoItem = GetTodoItem();
+        TodoItem todoItem = todoItemsFactory.GetTodoItem();
 
         appDbContext.TodoItems.Add(todoItem);
 
@@ -107,7 +97,7 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
     {
         await baseFixture.CleanDatabase();
 
-        TodoItem todoItem = GetTodoItem();
+        TodoItem todoItem = todoItemsFactory.GetTodoItem();
 
         appDbContext.TodoItems.Add(todoItem);
 

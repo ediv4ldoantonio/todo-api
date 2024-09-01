@@ -4,12 +4,14 @@ using Todo.API.Data;
 using Todo.API.Repositories;
 using Todo.API.Repositories.Contracts;
 using Todo.API.Services;
+using Todo.API.Tests.Factories;
 
 namespace Todo.API.Tests.Fixtures;
 
 public class BaseFixture : IDisposable
 {
     public ServiceProvider ServiceProvider { get; }
+    public Random Random { get; }
 
     public BaseFixture()
     {
@@ -17,6 +19,7 @@ public class BaseFixture : IDisposable
 
         ConfigureServices(serviceCollection);
 
+        Random = new Random();
         ServiceProvider = serviceCollection.BuildServiceProvider();
     }
 
@@ -34,6 +37,10 @@ public class BaseFixture : IDisposable
 
         #region Services
         services.AddScoped<TodoItemsService>();
+        #endregion
+
+        #region Factories
+        services.AddScoped<TodoItemsFactory>();
         #endregion
     }
 

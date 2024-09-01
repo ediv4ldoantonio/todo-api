@@ -38,9 +38,9 @@ public class TodoItemsService : ITodoItemsService
         };
     }
 
-    public Task DeleteAsync(string id)
+    public async Task DeleteAsync(string id)
     {
-        throw new NotImplementedException();
+        await todoItemsRepository.DeleteAsync(id);
     }
 
     public Task<IEnumerable<TodoItemDto>> GetAllAsync()
