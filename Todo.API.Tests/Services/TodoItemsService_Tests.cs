@@ -110,4 +110,29 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
         Assert.Equal(todoItem.Title, retrievedTodoItemDto.Title);
         Assert.Equal(todoItem.Description, retrievedTodoItemDto.Description);
     }
+
+    [Fact]
+    public async Task Test_Should_Update_TodoItem()
+    {
+        await baseFixture.CleanDatabase();
+
+        TodoItem todoItem = todoItemsFactory.GetTodoItem();
+
+        appDbContext.TodoItems.Add(todoItem);
+        await appDbContext.SaveChangesAsync();
+
+        await todoItemsService.UpdateAsync(todoItem.Id, new UpdateTodoItemDto()
+        {
+            Title = "updated Title",
+            Description = todoItem.Description,
+            DueDate = todoItem.DueDate,
+            Status = Status.Completed,
+            Priority = todoItem.Priority
+        });
+
+        var todoItems = appDbContext.TodoItems.ToList();
+
+        Assert.Equal("updated Title", todoItems[0].Title);
+        Assert.Equal(Status.Completed, todoItems[0].Status);
+    }
 }

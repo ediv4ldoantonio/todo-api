@@ -11,10 +11,10 @@ public interface ITodoItemsService
     Task<TodoItemDto?> GetByIdAsync(string id);
 
     // Add a new TodoItem
-    Task<TodoItemDto> AddAsync(CreateTodoItemDto createTodoItem);
+    Task<TodoItemDto> AddAsync(CreateTodoItemDto createTodoItemDto);
 
     // Update an existing TodoItem
-    Task UpdateAsync(TodoItemDto todoItemDto);
+    Task<TodoItemDto> UpdateAsync(string id, UpdateTodoItemDto updateTodoItemDto);
 
     // Delete an iTodoItem by ID
     Task DeleteAsync(string id);

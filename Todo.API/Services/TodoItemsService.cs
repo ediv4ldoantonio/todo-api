@@ -50,9 +50,20 @@ public class TodoItemsService : ITodoItemsService
         return MapTodoItemToDto(todoItem);
     }
 
-    public Task UpdateAsync(TodoItemDto todoItemDto)
+    public async Task<TodoItemDto> UpdateAsync(string id, UpdateTodoItemDto updateTodoItemDto)
     {
-        throw new NotImplementedException();
+        TodoItem todoItem = await todoItemsRepository.GetByIdAsync(id)
+                ?? throw new Exception("TodoItem Not Found");
+
+        todoItem.Title = updateTodoItemDto.Title;
+        todoItem.Description = updateTodoItemDto.Description;
+        todoItem.DueDate = updateTodoItemDto.DueDate;
+        todoItem.Status = updateTodoItemDto.Status;
+        todoItem.Priority = updateTodoItemDto.Priority;
+
+        await todoItemsRepository.UpdateAsync(todoItem);
+
+        return MapTodoItemToDto(todoItem);
     }
 
     private TodoItemDto MapTodoItemToDto(TodoItem todoItem)
