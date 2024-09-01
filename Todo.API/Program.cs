@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using Todo.API.DataContext;
+using Todo.API.Data;
 using Todo.API.Repositories;
 using Todo.API.Repositories.Contracts;
 
@@ -14,7 +14,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 });
 
 #region Repositories
-builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
+builder.Services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
 #endregion
 
 
@@ -42,6 +42,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+var context = app.Services.CreateScope().ServiceProvider
+        .GetRequiredService<ApplicationDbContext>();
+
+await DataSeeder.Seed(context);
 
 app.MapGet("/", () => "Todo API");
 

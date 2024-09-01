@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Todo.API.DataContext;
+using Todo.API.Data;
 using Todo.API.Repositories;
 
 namespace Todo.API.Tests.Fixtures;
@@ -26,7 +26,7 @@ public class BaseFixture : IDisposable
         });
 
         #region Repositories
-        services.AddScoped<TodoItemRepository>();
+        services.AddScoped<TodoItemsRepository>();
         #endregion
     }
 

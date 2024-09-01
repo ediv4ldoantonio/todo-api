@@ -1,5 +1,5 @@
 using Microsoft.EntityFrameworkCore;
-using Todo.API.DataContext;
+using Todo.API.Data;
 using Todo.API.Models;
 using Todo.API.Repositories.Contracts;
 
@@ -8,11 +8,11 @@ namespace Todo.API.Repositories;
 /// <summary>
 /// A repository that performs CRUD operations on TodoItems.
 /// </summary>
-public class TodoItemRepository : ITodoItemRepository
+public class TodoItemsRepository : ITodoItemsRepository
 {
     private readonly ApplicationDbContext appDbContext;
 
-    public TodoItemRepository(ApplicationDbContext appDbContext)
+    public TodoItemsRepository(ApplicationDbContext appDbContext)
     {
         this.appDbContext = appDbContext;
     }

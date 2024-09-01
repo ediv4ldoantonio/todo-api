@@ -1,5 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using Todo.API.DataContext;
+using Todo.API.Data;
 using Todo.API.Enums;
 using Todo.API.Models;
 using Todo.API.Repositories;
@@ -8,14 +8,14 @@ namespace Todo.API.Tests.Fixtures;
 
 public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 {
-    private readonly TodoItemRepository todoItemRepository;
+    private readonly TodoItemsRepository todoItemsRepository;
     private readonly ApplicationDbContext appDbContext;
     private readonly BaseFixture baseFixture;
 
     public TodoItemRepository_Tests(BaseFixture baseFixture)
     {
         this.baseFixture = baseFixture;
-        todoItemRepository = baseFixture.ServiceProvider.GetRequiredService<TodoItemRepository>();
+        todoItemsRepository = baseFixture.ServiceProvider.GetRequiredService<TodoItemsRepository>();
         appDbContext = baseFixture.ServiceProvider.GetRequiredService<ApplicationDbContext>();
     }
 
@@ -38,7 +38,7 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 
         TodoItem todoItem = GetTodoItem();
 
-        await todoItemRepository.AddAsync(todoItem);
+        await todoItemsRepository.AddAsync(todoItem);
 
         List<TodoItem> todoItems = appDbContext.TodoItems.ToList();
         Assert.Single(todoItems);
@@ -62,7 +62,7 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 
         Assert.NotEmpty(todoItems);
 
-        await todoItemRepository.DeleteAsync(todoItem.Id);
+        await todoItemsRepository.DeleteAsync(todoItem.Id);
 
         todoItems = appDbContext.TodoItems.ToList();
 
@@ -79,7 +79,7 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 
         await appDbContext.SaveChangesAsync();
 
-        IEnumerable<TodoItem> todoItems = await todoItemRepository.GetAllAsync();
+        IEnumerable<TodoItem> todoItems = await todoItemsRepository.GetAllAsync();
         Assert.NotEmpty(todoItems);
         Assert.Equal(3, todoItems.Count());
     }
@@ -95,7 +95,7 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 
         await appDbContext.SaveChangesAsync();
 
-        TodoItem? retrievedTodoItem = await todoItemRepository.GetByIdAsync(todoItem.Id);
+        TodoItem? retrievedTodoItem = await todoItemsRepository.GetByIdAsync(todoItem.Id);
 
         Assert.NotNull(retrievedTodoItem);
         Assert.Equal(todoItem.Id, retrievedTodoItem.Id);
@@ -115,7 +115,7 @@ public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
 
         todoItem.Title = "changed test";
 
-        await todoItemRepository.UpdateAsync(todoItem);
+        await todoItemsRepository.UpdateAsync(todoItem);
 
         TodoItem? updatedTodoItem = appDbContext.TodoItems
                 .Where(item => item.Id == todoItem.Id)
