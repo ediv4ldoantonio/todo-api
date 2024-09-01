@@ -40,9 +40,14 @@ public class TodoItemsService : ITodoItemsService
         return todoItems.Select(todoItem => MapTodoItemToDto(todoItem));
     }
 
-    public Task<TodoItemDto?> GetByIdAsync(string id)
+    public async Task<TodoItemDto?> GetByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        TodoItem? todoItem = await todoItemsRepository.GetByIdAsync(id);
+
+        if (todoItem == null)
+            return null;
+
+        return MapTodoItemToDto(todoItem);
     }
 
     public Task UpdateAsync(TodoItemDto todoItemDto)
