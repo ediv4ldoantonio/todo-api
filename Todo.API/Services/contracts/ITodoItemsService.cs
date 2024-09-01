@@ -11,7 +11,7 @@ public interface ITodoItemsService
     Task<TodoItemDto?> GetByIdAsync(string id);
 
     // Add a new TodoItem
-    Task AddAsync(CreateTodoItemDto createTodoItem);
+    Task<TodoItemDto> AddAsync(CreateTodoItemDto createTodoItem);
 
     // Update an existing TodoItem
     Task UpdateAsync(TodoItemDto todoItemDto);

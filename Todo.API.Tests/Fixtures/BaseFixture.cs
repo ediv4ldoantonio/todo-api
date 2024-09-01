@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.API.Data;
 using Todo.API.Repositories;
+using Todo.API.Repositories.Contracts;
+using Todo.API.Services;
 
 namespace Todo.API.Tests.Fixtures;
 
@@ -22,11 +24,16 @@ public class BaseFixture : IDisposable
     {
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            options.UseInMemoryDatabase("todo-api");
+            options.UseInMemoryDatabase(Guid.NewGuid().ToString());
         });
 
         #region Repositories
         services.AddScoped<TodoItemsRepository>();
+        services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
+        #endregion
+
+        #region Services
+        services.AddScoped<TodoItemsService>();
         #endregion
     }
 
@@ -40,6 +47,8 @@ public class BaseFixture : IDisposable
     {
         var appDbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
-        await appDbContext.Database.EnsureDeletedAsync();
+        appDbContext.TodoItems.RemoveRange(appDbContext.TodoItems);
+
+        await appDbContext.SaveChangesAsync();
     }
 }

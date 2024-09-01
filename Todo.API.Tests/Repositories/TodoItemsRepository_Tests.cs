@@ -6,13 +6,13 @@ using Todo.API.Repositories;
 
 namespace Todo.API.Tests.Fixtures;
 
-public class TodoItemRepository_Tests : IClassFixture<BaseFixture>
+public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
 {
     private readonly TodoItemsRepository todoItemsRepository;
     private readonly ApplicationDbContext appDbContext;
     private readonly BaseFixture baseFixture;
 
-    public TodoItemRepository_Tests(BaseFixture baseFixture)
+    public TodoItemsRepository_Tests(BaseFixture baseFixture)
     {
         this.baseFixture = baseFixture;
         todoItemsRepository = baseFixture.ServiceProvider.GetRequiredService<TodoItemsRepository>();
