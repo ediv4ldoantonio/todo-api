@@ -9,7 +9,7 @@ public static class DataSeeder
     {
         if (!appDbContext.TodoItems.Any())
         {
-            appDbContext.AddRange([
+            appDbContext.TodoItems.AddRange([
                 new TodoItem()
                 {
                     Title = "Make an API",
@@ -35,6 +35,22 @@ public static class DataSeeder
                     Status = Status.InProgress
                 }
             ]);
+
+            if (!appDbContext.Categories.Any())
+            {
+                appDbContext.Categories.AddRange([
+                    new Category()
+                    {
+                        Name = "Personal",
+                        Description = "Todo items that are personal"
+                    },
+                    new Category()
+                    {
+                        Name = "Work",
+                        Description = "Tasks that are related to work"
+                    },
+                ]);
+            }
 
             await appDbContext.SaveChangesAsync();
         }

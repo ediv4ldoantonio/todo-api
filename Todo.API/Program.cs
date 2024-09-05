@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 
 #region Repositories
 builder.Services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
+builder.Services.AddScoped<ICategoriesRepository, CategoriesRepository>();
 #endregion
 
 #region Services
