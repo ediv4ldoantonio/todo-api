@@ -12,7 +12,8 @@ public class MappingProfile : Profile
         // TodoItem
         CreateMap<CreateTodoItemDto, TodoItem>();
         CreateMap<UpdateTodoItemDto, TodoItem>();
-        CreateMap<TodoItem, TodoItemDto>();
+        CreateMap<TodoItem, TodoItemDto>()
+            .ForMember(dest => dest.CategoryId, src => src.MapFrom(c => c.Category.Id));
 
         // Category
         CreateMap<CreateCategoryDto, Category>();

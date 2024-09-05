@@ -57,9 +57,4 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-var context = app.Services.CreateScope().ServiceProvider
-        .GetRequiredService<ApplicationDbContext>();
-
-await DataSeeder.Seed(context);
-
 app.Run();

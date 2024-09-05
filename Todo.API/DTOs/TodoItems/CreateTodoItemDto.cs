@@ -7,6 +7,9 @@ public record CreateTodoItemDto
 {
     [Required(ErrorMessage = "Please enter the Title")]
     public required string Title { get; set; }
+
+    [Required(ErrorMessage = "Please enter the Category")]
+    public required string CategoryId { get; set; }
     public string? Description { get; set; }
 
     [Required(ErrorMessage = "Please enter the due date")]

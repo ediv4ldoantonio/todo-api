@@ -9,16 +9,23 @@ namespace Todo.API.Services;
 public class TodoItemsService : ITodoItemsService
 {
     private readonly ITodoItemsRepository todoItemsRepository;
+    private readonly ICategoriesRepository categoriesRepository;
     private readonly IMapper mapper;
 
-    public TodoItemsService(ITodoItemsRepository todoItemsRepository, IMapper mapper)
+    public TodoItemsService(ITodoItemsRepository todoItemsRepository, ICategoriesRepository categoriesRepository, IMapper mapper)
     {
         this.todoItemsRepository = todoItemsRepository;
+        this.categoriesRepository = categoriesRepository;
         this.mapper = mapper;
     }
     public async Task<TodoItemDto> AddAsync(CreateTodoItemDto createTodoItem)
     {
+        Category category = await categoriesRepository.GetByIdAsync(createTodoItem.CategoryId)
+            ?? throw new Exception("Category not found");
+
         TodoItem todoItem = mapper.Map<TodoItem>(createTodoItem);
+
+        todoItem.Category = category;
 
         await todoItemsRepository.AddAsync(todoItem);
 
@@ -33,6 +40,13 @@ public class TodoItemsService : ITodoItemsService
     public async Task<IEnumerable<TodoItemDto>> GetAllAsync()
     {
         IEnumerable<TodoItem> todoItems = await todoItemsRepository.GetAllAsync();
+
+        return mapper.Map<IEnumerable<TodoItemDto>>(todoItems);
+    }
+
+    public async Task<IEnumerable<TodoItemDto>> GetAllByCategoryAsync(string categoryId)
+    {
+        IEnumerable<TodoItem> todoItems = await todoItemsRepository.GetAllByCategoryAsync(categoryId);
 
         return mapper.Map<IEnumerable<TodoItemDto>>(todoItems);
     }

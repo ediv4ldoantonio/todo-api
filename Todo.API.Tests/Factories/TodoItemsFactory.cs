@@ -1,4 +1,3 @@
-using Todo.API.DTOs;
 using Todo.API.Enums;
 using Todo.API.Models;
 
@@ -7,10 +6,12 @@ namespace Todo.API.Tests.Factories;
 public class TodoItemsFactory
 {
     private readonly Random random;
+    private readonly CategoriesFactory categoriesFactory;
 
-    public TodoItemsFactory()
+    public TodoItemsFactory(CategoriesFactory categoriesFactory)
     {
         random = new Random();
+        this.categoriesFactory = categoriesFactory;
     }
 
     public TodoItem GetTodoItem()
@@ -21,7 +22,21 @@ public class TodoItemsFactory
             Description = $"desc-{random.Next()}",
             DueDate = DateTime.Now.AddDays(random.Next(1, 7)),
             Priority = Priority.High,
-            Status = Status.Pending
+            Status = Status.Pending,
+            Category = categoriesFactory.GetCategory()
+        };
+    }
+
+    public TodoItem GetTodoItem(Category category)
+    {
+        return new()
+        {
+            Title = $"Test-{random.Next()}",
+            Description = $"desc-{random.Next()}",
+            DueDate = DateTime.Now.AddDays(random.Next(1, 7)),
+            Priority = Priority.High,
+            Status = Status.Pending,
+            Category = category
         };
     }
 }

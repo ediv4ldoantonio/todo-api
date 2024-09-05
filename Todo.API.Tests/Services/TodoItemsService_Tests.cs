@@ -14,6 +14,7 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
 {
     private readonly TodoItemsService todoItemsService;
     private readonly TodoItemsFactory todoItemsFactory;
+    private readonly CategoriesFactory categoriesFactory;
     private readonly ApplicationDbContext appDbContext;
     private readonly BaseFixture baseFixture;
 
@@ -22,7 +23,19 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
         this.baseFixture = baseFixture;
         todoItemsService = baseFixture.ServiceProvider.GetRequiredService<TodoItemsService>();
         todoItemsFactory = baseFixture.ServiceProvider.GetRequiredService<TodoItemsFactory>();
+        categoriesFactory = baseFixture.ServiceProvider.GetRequiredService<CategoriesFactory>();
         appDbContext = baseFixture.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    }
+
+    private async Task<Category> GetCategory()
+    {
+        Category category = categoriesFactory.GetCategory();
+
+        appDbContext.Categories.Add(category);
+
+        await appDbContext.SaveChangesAsync();
+
+        return category;
     }
 
     [Fact]
@@ -30,12 +43,15 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
     {
         await baseFixture.CleanDatabase();
 
+        Category category = await GetCategory();
+
         TodoItemDto todoItemDto = await todoItemsService.AddAsync(new CreateTodoItemDto()
         {
             Title = "Todo-1",
             Description = "lorem ipsum",
             DueDate = DateTime.Today.AddDays(7),
-            Priority = Priority.Low
+            Priority = Priority.Low,
+            CategoryId = category.Id
         });
 
         var todoItems = await appDbContext.TodoItems.ToListAsync();
@@ -90,6 +106,40 @@ public class TodoItemsService_Tests : IClassFixture<BaseFixture>
 
         Assert.NotEmpty(retrievedTodoItems);
         Assert.Equal(3, retrievedTodoItems.Count());
+
+        foreach (var todoItem in retrievedTodoItems)
+        {
+            Assert.False(string.IsNullOrEmpty(todoItem.CategoryId));
+        }
+    }
+
+    [Fact]
+    public async Task Test_Should_Get_All_TodoItems_By_Category()
+    {
+        await baseFixture.CleanDatabase();
+
+        Category category = categoriesFactory.GetCategory();
+
+        List<TodoItem> todoItems = [];
+
+        for (int i = 0; i < 3; i++)
+            todoItems.Add(todoItemsFactory.GetTodoItem(category));
+
+        todoItems.Add(todoItemsFactory.GetTodoItem());
+
+        appDbContext.TodoItems.AddRange(todoItems);
+
+        await appDbContext.SaveChangesAsync();
+
+        IEnumerable<TodoItemDto> retrievedTodoItems = await todoItemsService.GetAllByCategoryAsync(category.Id);
+
+        Assert.NotEmpty(retrievedTodoItems);
+        Assert.Equal(3, retrievedTodoItems.Count());
+
+        foreach (var todoItem in retrievedTodoItems)
+        {
+            Assert.False(string.IsNullOrEmpty(todoItem.CategoryId));
+        }
     }
 
     [Fact]

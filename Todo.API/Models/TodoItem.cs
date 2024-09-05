@@ -9,6 +9,7 @@ public class TodoItem
     public string Id { get; set; } = Guid.NewGuid().ToString();
     [Required]
     public required string Title { get; set; }
+    public required Category Category { get; set; }
     public string? Description { get; set; }
     public DateTime DueDate { get; set; }
     public Priority Priority { get; set; }

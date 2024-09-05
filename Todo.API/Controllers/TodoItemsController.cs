@@ -25,6 +25,15 @@ public class TodoItemsController : ControllerBase
         return Ok(todoItems);
     }
 
+    [HttpGet("{categoryId}")]
+    [ProducesResponseType<IEnumerable<TodoItemDto>>(StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetTodoItems(string categoryId)
+    {
+        var todoItems = await todoItemsService.GetAllByCategoryAsync(categoryId);
+
+        return Ok(todoItems);
+    }
+
     [HttpGet("{id}")]
     [ProducesResponseType<TodoItemDto>(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]

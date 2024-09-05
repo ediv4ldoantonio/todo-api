@@ -11,12 +11,14 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
 {
     private readonly TodoItemsRepository todoItemsRepository;
     private readonly TodoItemsFactory todoItemsFactory;
+    private readonly CategoriesFactory categoriesFactory;
     private readonly ApplicationDbContext appDbContext;
     private readonly BaseFixture baseFixture;
 
     public TodoItemsRepository_Tests(BaseFixture baseFixture)
     {
         this.baseFixture = baseFixture;
+        categoriesFactory = baseFixture.ServiceProvider.GetRequiredService<CategoriesFactory>();
         todoItemsFactory = baseFixture.ServiceProvider.GetRequiredService<TodoItemsFactory>();
         todoItemsRepository = baseFixture.ServiceProvider.GetRequiredService<TodoItemsRepository>();
         appDbContext = baseFixture.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -71,6 +73,25 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
         await appDbContext.SaveChangesAsync();
 
         IEnumerable<TodoItem> todoItems = await todoItemsRepository.GetAllAsync();
+        Assert.NotEmpty(todoItems);
+        Assert.Equal(3, todoItems.Count());
+    }
+
+    [Fact]
+    public async Task Test_Should_Get_All_TodoItems_By_Category()
+    {
+        await baseFixture.CleanDatabase();
+
+        Category category = categoriesFactory.GetCategory();
+
+        for (int i = 0; i < 3; i++)
+            appDbContext.TodoItems.Add(todoItemsFactory.GetTodoItem(category));
+
+        appDbContext.TodoItems.Add(todoItemsFactory.GetTodoItem());
+
+        await appDbContext.SaveChangesAsync();
+
+        IEnumerable<TodoItem> todoItems = await todoItemsRepository.GetAllByCategoryAsync(category.Id);
         Assert.NotEmpty(todoItems);
         Assert.Equal(3, todoItems.Count());
     }

@@ -7,6 +7,7 @@ public interface ITodoItemsService
 {
     // Get all TodoItems items
     Task<IEnumerable<TodoItemDto>> GetAllAsync();
+    Task<IEnumerable<TodoItemDto>> GetAllByCategoryAsync(string categoryId);
 
     // Get a single TodoItem by ID
     Task<TodoItemDto?> GetByIdAsync(string id);

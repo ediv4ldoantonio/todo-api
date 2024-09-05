@@ -55,6 +55,18 @@ public class TodoItemsRepository : ITodoItemsRepository
     }
 
     /// <summary>
+    /// Get all the TodoItems that are in the Database.
+    /// </summary>
+    /// <returns>A collection of TodoItems.</returns>
+    public async Task<IEnumerable<TodoItem>> GetAllByCategoryAsync(string categoryId)
+    {
+        return await appDbContext.TodoItems
+            .OrderByDescending(t => t.CreatedAt)
+            .Where(c => c.Category.Id == categoryId)
+            .ToListAsync();
+    }
+
+    /// <summary>
     /// Retrieve the specified TodoItem from the Database.
     /// </summary>
     /// <param name="id">The Id of the requested TodoItem</param>
