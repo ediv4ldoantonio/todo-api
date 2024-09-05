@@ -3,8 +3,9 @@ using Todo.API.Data;
 using Todo.API.Models;
 using Todo.API.Repositories;
 using Todo.API.Tests.Factories;
+using Todo.API.Tests.Fixtures;
 
-namespace Todo.API.Tests.Fixtures;
+namespace Todo.API.Tests.Repositories;
 
 public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
 {
@@ -30,7 +31,7 @@ public class TodoItemsRepository_Tests : IClassFixture<BaseFixture>
 
         await todoItemsRepository.AddAsync(todoItem);
 
-        List<TodoItem> todoItems = appDbContext.TodoItems.ToList();
+        List<TodoItem> todoItems = [.. appDbContext.TodoItems];
         Assert.Single(todoItems);
         Assert.Equal(todoItem.Description, todoItems[0].Description);
         Assert.Equal(todoItem.Id, todoItems[0].Id);

@@ -1,3 +1,5 @@
+using Microsoft.EntityFrameworkCore;
+using Todo.API.Data;
 using Todo.API.Models;
 using Todo.API.Repositories.Contracts;
 
@@ -5,28 +7,48 @@ namespace Todo.API.Repositories;
 
 public class CategoriesRepository : ICategoriesRepository
 {
-    public Task AddAsync(Category entity)
+    private readonly ApplicationDbContext appDbContext;
+
+    public CategoriesRepository(ApplicationDbContext appDbContext)
     {
-        throw new NotImplementedException();
+        this.appDbContext = appDbContext;
     }
 
-    public Task DeleteAsync(string id)
+    public async Task AddAsync(Category category)
     {
-        throw new NotImplementedException();
+        appDbContext.Categories.Add(category);
+
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task<IEnumerable<Category>> GetAllAsync()
+    public async Task DeleteAsync(string id)
     {
-        throw new NotImplementedException();
+        Category category = await GetByIdAsync(id)
+                ?? throw new Exception("Category not found");
+
+        appDbContext.Categories.Remove(category);
+
+        await appDbContext.SaveChangesAsync();
     }
 
-    public Task<Category?> GetByIdAsync(string id)
+    public async Task<IEnumerable<Category>> GetAllAsync()
     {
-        throw new NotImplementedException();
+        return await appDbContext.Categories
+                .OrderByDescending(c => c.CreatedAt)
+                .ToListAsync();
     }
 
-    public Task UpdateAsync(Category entity)
+    public async Task<Category?> GetByIdAsync(string id)
     {
-        throw new NotImplementedException();
+        return await appDbContext.Categories
+                .Where(c => c.Id == id)
+                .FirstOrDefaultAsync();
+    }
+
+    public async Task UpdateAsync(Category category)
+    {
+        appDbContext.Categories.Update(category);
+
+        await appDbContext.SaveChangesAsync();
     }
 }

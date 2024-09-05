@@ -33,6 +33,9 @@ public class BaseFixture : IDisposable
         #region Repositories
         services.AddScoped<TodoItemsRepository>();
         services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
+
+        services.AddScoped<CategoriesRepository>();
+        services.AddScoped<ICategoriesRepository, CategoriesRepository>();
         #endregion
 
         #region Services
@@ -41,6 +44,7 @@ public class BaseFixture : IDisposable
 
         #region Factories
         services.AddScoped<TodoItemsFactory>();
+        services.AddScoped<CategoriesFactory>();
         #endregion
     }
 
@@ -55,6 +59,7 @@ public class BaseFixture : IDisposable
         var appDbContext = ServiceProvider.GetRequiredService<ApplicationDbContext>();
 
         appDbContext.TodoItems.RemoveRange(appDbContext.TodoItems);
+        appDbContext.Categories.RemoveRange(appDbContext.Categories);
 
         await appDbContext.SaveChangesAsync();
     }

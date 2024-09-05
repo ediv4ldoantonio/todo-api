@@ -6,6 +6,7 @@ public class Category
 {
     [Key]
     public string Id { get; set; } = Guid.NewGuid().ToString();
+    public required string Name { get; set; }
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public DateTime? UpdatedAt { get; set; }
