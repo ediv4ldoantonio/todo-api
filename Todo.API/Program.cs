@@ -24,6 +24,7 @@ builder.Services.AddScoped<ITodoItemsRepository, TodoItemsRepository>();
 
 #region Services
 builder.Services.AddScoped<ITodoItemsService, TodoItemsService>();
+builder.Services.AddScoped<ICategoriesService, CategoriesService>();
 #endregion
 
 builder.Services.AddEndpointsApiExplorer();

@@ -15,7 +15,7 @@ public interface ICategoriesService
     Task<CategoryDto> AddAsync(CreateCategoryDto createCategoryDto);
 
     // Update an existing Category
-    Task<CategoryDto> UpdateAsync(CategoryDto categoryDto);
+    Task<CategoryDto> UpdateAsync(string id, UpdateCategoryDto updateCategoryDto);
 
     // Delete an Category by ID
     Task DeleteAsync(string id);

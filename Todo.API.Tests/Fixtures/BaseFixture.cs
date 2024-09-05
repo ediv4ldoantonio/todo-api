@@ -41,6 +41,7 @@ public class BaseFixture : IDisposable
 
         #region Services
         services.AddScoped<TodoItemsService>();
+        services.AddScoped<CategoriesService>();
         #endregion
 
         #region Factories
