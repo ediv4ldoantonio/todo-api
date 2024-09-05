@@ -1,8 +1,8 @@
 using Todo.API.Enums;
 
-namespace Todo.API.DTOs;
+namespace Todo.API.DTOs.TodoItems;
 
-public class TodoItemDto
+public record TodoItemDto
 {
     public required string Id { get; set; }
     public required string Title { get; set; }

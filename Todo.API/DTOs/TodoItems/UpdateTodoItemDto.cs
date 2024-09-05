@@ -1,9 +1,8 @@
-using System.ComponentModel.DataAnnotations;
 using Todo.API.Enums;
 
-namespace Todo.API.DTOs;
+namespace Todo.API.DTOs.TodoItems;
 
-public class UpdateTodoItemDto
+public record UpdateTodoItemDto
 {
     public required string Title { get; set; }
 

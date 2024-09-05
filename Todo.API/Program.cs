@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Todo.API.Data;
+using Todo.API.Mappings;
 using Todo.API.Repositories;
 using Todo.API.Repositories.Contracts;
 using Todo.API.Services;
@@ -35,6 +36,8 @@ builder.Services.AddSwaggerGen(options =>
         Description = "An ASP.NET Core Web API for managing ToDo items",
     });
 });
+
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 
 var app = builder.Build();
 

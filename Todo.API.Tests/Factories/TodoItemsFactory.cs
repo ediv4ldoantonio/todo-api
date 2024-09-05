@@ -24,19 +24,4 @@ public class TodoItemsFactory
             Status = Status.Pending
         };
     }
-
-    public TodoItemDto MapTodoItemToDto(TodoItem todoItem)
-    {
-        return new TodoItemDto()
-        {
-            Id = todoItem.Id,
-            Description = todoItem.Description,
-            Title = todoItem.Title,
-            DueDate = todoItem.DueDate,
-            CreatedAt = todoItem.CreatedAt,
-            Priority = todoItem.Priority,
-            Status = todoItem.Status,
-            UpdatedAt = todoItem.UpdatedAt
-        };
-    }
 }

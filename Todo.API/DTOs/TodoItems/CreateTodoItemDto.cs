@@ -1,13 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using Todo.API.Enums;
 
-namespace Todo.API.DTOs;
+namespace Todo.API.DTOs.TodoItems;
 
-public class CreateTodoItemDto
+public record CreateTodoItemDto
 {
     [Required(ErrorMessage = "Please enter the Title")]
     public required string Title { get; set; }
-
     public string? Description { get; set; }
 
     [Required(ErrorMessage = "Please enter the due date")]

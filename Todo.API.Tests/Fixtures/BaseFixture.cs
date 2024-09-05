@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.API.Data;
+using Todo.API.Mappings;
 using Todo.API.Repositories;
 using Todo.API.Repositories.Contracts;
 using Todo.API.Services;
@@ -46,6 +47,8 @@ public class BaseFixture : IDisposable
         services.AddScoped<TodoItemsFactory>();
         services.AddScoped<CategoriesFactory>();
         #endregion
+
+        services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
     }
 
     public void Dispose()

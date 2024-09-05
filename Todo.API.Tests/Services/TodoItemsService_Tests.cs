@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Todo.API.Data;
 using Todo.API.DTOs;
+using Todo.API.DTOs.TodoItems;
 using Todo.API.Enums;
 using Todo.API.Models;
 using Todo.API.Services;
